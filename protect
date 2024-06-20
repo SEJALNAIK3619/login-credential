@@ -1,0 +1,208 @@
+about js
+export default function About(){
+
+    return(
+<>
+        <h2 align="center">About Us</h2>
+</>
+
+    )
+}
+contact js
+export default function Contactus(){
+
+    return(
+<>
+        <h2 align="center">Contact Us</h2>
+</>
+
+    )
+}
+header js
+import {Link} from "react-router-dom";
+export default function Header(){
+
+    return   (
+<>
+<nav class="navbar navbar-expand-lg navbar-light bg-light px-5" >
+  <div class="container-fluid">
+    <Link to='/'  class="navbar-brand">React Web</Link>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item">
+          <Link  class="nav-link active" aria-current="page" to='/'>Home</Link>
+        </li>
+        <li class="nav-item">
+          <Link to='/Services' class="nav-link" >Services</Link>
+        </li>
+        <li class="nav-item">
+          <Link to='/Product' class="nav-link">Product</Link>
+        </li>
+        <li class="nav-item">
+          <Link to='/Contactus' class="nav-link">Contact Us</Link>
+        </li>
+        <li class="nav-item">
+          <Link to='/About' class="nav-link " href="#" tabindex="-1" >About Us</Link>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+</>
+
+    );
+}
+home.js
+export default function Home(){
+
+    return(
+<>
+        <h2 align="center">Home</h2>
+</>
+
+    )
+}
+login.js
+import { useState } from "react";
+import{useNavigate} from "react-router-dom";
+
+export default function Login(){
+
+    var nav=useNavigate();
+
+
+    const [userName,setuserName] = useState("");
+    const [password,setpassword] = useState("");
+
+    async function userLogin(e){
+        e.preventDefault();
+        try{
+            var res = await fetch('http://localhost:5500/login',{
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({userName,password})
+        });
+        var data = await res.json();
+        if(res.ok){
+            if(data.message == "Login Successfull"){
+                localStorage.setItem('login',true);
+                nav('/');
+            }
+            else{
+                alert("Invalid Credentials");
+            }
+        }
+        }
+        catch{
+            console.log("Error");
+        }
+    }
+    return(
+        <>
+            <div className="container mt-5">
+                <div className="row justify-content-center">
+                    <div className="col-md-5">
+                        <h2 className="text-center">Login</h2>
+                        <form onSubmit={userLogin}>
+                            <label className="form-label">User Name</label>
+                            <input type="text" onChange={(e)=>setuserName(e.target.value)} className="form-control mb-3" />
+                            <label className="form-label">Password</label>
+                            <input type="password" onChange={(e)=>setpassword(e.target.value)} className="form-control mb-3" />
+                            <button type="submit" className="btn btn-info">Login</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </>
+    );
+}
+product.js
+export default function Product(){
+
+    return(
+<>
+        <h2 align="center">Product</h2>
+</>
+
+    )
+}
+protact.js
+import { useEffect } from "react";
+import{useNavigate}from "react-router-dom";
+
+
+export default function Protact(props){
+    var nav=useNavigate();
+    useEffect(()=>{
+
+        var login=localStorage.getItem('login');
+        if(login==null){
+            nav('/login');
+        }
+    })
+    const{Component}=props;
+    return(
+        <>
+        <Component />
+        </>
+    );
+}
+services.js
+export default function Services(){
+
+    return(
+<>
+        <h2 align="center">Services</h2>
+</>
+
+    )
+}
+appjs
+
+import './App.css';
+import Header from './Component/Header';
+import Home from './Component/Home';
+import Login from './Component/Login';
+import Services from './Component/Services';
+import Product from './Component/Product';
+import About from './Component/About';
+import Contactus from './Component/Contactus';
+import {Routes,Route,BrowserRouter} from'react-router-dom';
+import Protact from './Component/Protact';
+
+function App() {
+  
+  return (
+    <>
+     <BrowserRouter>
+    <Header/>
+    <Routes>
+      <Route path="/" element={<Protact Component={Home}/>} />
+     <Route path="services" element={<Protact Component={Services}/>}/>
+     <Route path="Product" element={<Protact Component={Product}/>}/>
+     <Route path="About" element={<Protact Component={About}/>}/>
+        <Route path="Login" element={<Login/>}/>
+    <Route path="Contactus" element={<Protact Component={Contactus}/>}/>
+    
+         </Routes>
+ </BrowserRouter>
+   
+
+    </>
+  );
+}
+
+index.html
+
+ -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+export default App;
+
+
